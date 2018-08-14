@@ -14,6 +14,7 @@
 var autobahn = require('./../index.js');
 var testutil = require('./testutil.js');
 
+
 exports.testConnect = function (testcase) {
 
    testcase.expect(1);
@@ -34,13 +35,12 @@ exports.testConnect = function (testcase) {
             res[i].leave();
          }
 
-         var chk = test.check();
+         var chk = test.check()
          testcase.ok(!chk, chk);
          testcase.done();
       },
       function (err) {
          test.log(err);
-         testcase.done();
       }
    );
 }

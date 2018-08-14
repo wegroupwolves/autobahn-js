@@ -14,18 +14,19 @@
 var autobahn = require('./../index.js');
 var testutil = require('./testutil.js');
 
-exports.testCBORSerialization = function (testcase) {
+
+exports.testMsgpackSerialization = function (testcase) {
 
    testcase.expect(1);
 
-   var test = new testutil.Testlog("test/test_serialization_cbor.txt");
+   var test = new testutil.Testlog("test/test_msgpack_serialization.txt");
 
-   var ser = new autobahn.serializer.CBORSerializer();
+   var serializer = new autobahn.serializer.MsgpackSerializer();
 
    var config = {
       url: testutil.config.url,
       realm: testutil.config.realm,
-      serializers: [ser]
+      serializers: [serializer]
    };
    var connection = new autobahn.Connection(config);
 

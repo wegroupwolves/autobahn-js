@@ -53,7 +53,7 @@ To enable *debug mode*, define a global variable
       <script>
          AUTOBAHN_DEBUG = true;
       </script>
-      <script src="http://path_to_your_hosted_version_of_autobah/autobahn.min.jgz">
+      <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz">
      </script>
    </body>
 </html>
@@ -135,7 +135,7 @@ autobahn.Connection.onclose = function (reason, details) {
 -   `"closed"`: The connection was closed explicitly (by the application or server). No automatic reconnection will be tried.
 -   `"lost"`: The connection had been formerly established at least once, but now was lost. Automatic reconnection will happen **unless you return truthy** from this callback.
 -   `"unreachable"`: The connection could not be established in the first place. No automatic reattempt will happen, since most often the cause is fatal (e.g. invalid server URL or server unreachable)
--   `"unsupported"`: No WebSocket transport could be created. For security reasons the WebSocket spec states that there should not be any specific errors for network-related issues, so no details are returned in this case either.
+-   `unsupported`: No WebSocket transport could be created. For security reasons the WebSocket spec states that there should not be any specific errors for network-related issues, so no details are returned in this case either.
 
 `details` is an object containing the `reason` and `message` passed to  `autobahn.Connection.close()`, and thus does not apply in case of `"lost"` or `"unreachable"`.
 
@@ -205,50 +205,6 @@ Options that control **WebSocket subprotocol handling**:
 -   `skip_subprotocol_check`: Not yet implemented.
 -   `skip_subprotocol_announce`: Not yet implemented.
 
-Options that define **Custom error handlers:**
--   `on_user_error`: *function* - This error handler is called in the following cases: 
-    - an exception raised in `onopen`, `onclose`, `onchallenge` callbacks,
-    - an exception raised in the event handler in the subscriber role,
-    - an error occurred in the invocation handler in the callee role (the handler called in the client, before 
-      the error message is sent back to the Dealer.)
--   `on_internal_error`: *function* - This error handler is called in the following cases:
-    - not able to create a Wamp transport,
-    - when a protocol violation is occured,
-    - when no `onchallenge` defined, but a challenge request is received due to authenticate the client,
-
-
-```javascript
-    var connection = new autobahn.Connection({
-       on_user_error: function (error, customErrorMessage) {
-           // here comes your custom error handling, when a 
-           // something went wrong in a user defined callback.
-        },
-        on_internal_error: function (error, customErrorMessage) {
-           // here comes your custom error handling, when a 
-           // something went wrong in the autobahn core.
-        }
-        // ... other options
-    });
-
-```
-
-> **note**
->
-> If no error handler is defined for these functions, an error level consol log will be written. 
-
-> **note**
->
-> In a case of error handling in the Callee role, when the invocation handler is executed, the error
-> is reported on the Callee side (with the custom error handler or an error log), but despite that the
-> error is sent back to the Dealer, and the Caller will receive a `runtime.error` wamp message.
-
-
- Options that control **tls connection**:
- -   `tlsConfiguration`: *object*
-     - `ca`: *Buffer | String* - CA
-     - `cert`: *Buffer | String* - Certificate Public Key
-     - `key`: *Buffer | String* - Certificate Private Key
-  
 Connection Properties
 ---------------------
 
@@ -262,7 +218,7 @@ To check whether the connection (the underlying transport for the session) has b
 
     Connection.isConnected
 
-which returns `true` if the Connection is open.
+which returns `true` if the Conncetion is open.
 
 A read-only property that signals if the **underlying session is open** and attached to a realm:
 
@@ -404,7 +360,7 @@ The log method will log the WAMP session ID and the realm of the session, as wel
 URI Shortcuts
 -------------
 
-Establish an URI prefix to be used as a shortcut in WAMP interactions on `session`:
+Establish an URI prefix to be used as a shortcut in WAMp interactions on `session`:
 
     Session.prefix(shortcut, prefix)
 
@@ -511,7 +467,7 @@ Complete Examples:
 
 -   [PubSub Basic](https://github.com/crossbario/autobahn-python/tree/master/examples/twisted/wamp/pubsub/basic)
 
-Pattern-Based Subscriptions
+Patter-Based Subscriptions
 --------------------------
 
 As a default, topic URIs in subscriptions are matched exactly.

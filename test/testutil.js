@@ -24,47 +24,26 @@ var config = {
          protocols: ['wamp.2.json']
       }
    ],
-   realm: 'crossbardemo'
+   realm: 'realm1'
 }
 */
 
-var create_timeout_handler = function(testcase) {
-    var TIMEOUT = 3000;
-    var timer;
-    return {
-        set: function () {
-            timer = setTimeout(function() {
-                testcase.ok(false, 'Timeout!');
-                testcase.done();
-            }, TIMEOUT);
-        },
-        clear: function () {
-            clearTimeout(timer);
-        }
-    }
-}
-
 // shortcut config
-var default_config = {
+var config = {
    url: 'ws://127.0.0.1:8080/ws',
-   //realm: 'realm1'
-   realm: 'crossbardemo'
+   realm: 'realm1'
 }
 
-function connect_n(n, config) {
+function connect_n(n) {
    var dl = [];
    for (var i = 0; i < n; ++i) {
       (function (idx) {
          var d = autobahn.when.defer();
-         var connection = new autobahn.Connection(config || default_config);
+         var connection = new autobahn.Connection(config);
 
          connection.onopen = function (session) {
             d.resolve(session);
          };
-
-         connection.onclose = function (reason, details) {
-            console.log('CLOSE', reason, details);
-         }
 
          connection.open();
 
@@ -81,7 +60,6 @@ var Testlog = function (filename) {
 
    self._filename = filename;
    self._log = [];
-//   self._log = [["AutobahnJS " + autobahn.version]];
 };
 
 
@@ -165,6 +143,5 @@ Testlog.prototype.check = function () {
 
 
 exports.Testlog = Testlog;
-exports.config = default_config;
+exports.config = config;
 exports.connect_n = connect_n;
-exports.create_timeout_handler = create_timeout_handler;

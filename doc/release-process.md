@@ -1,34 +1,27 @@
 # Releasing Autobahn|JS
 
-Autobahn is released to the following locations:
-
-1. On NPM, here https://www.npmjs.com/package/autobahn
-2. On GitHub, here https://github.com/crossbario/autobahn-js-built
-
 ## Release Steps
 
-### Test
+Autobahn is release to the following locations:
 
-Start a local Crossbar.io node with a default configuration (`crossbar init && crossbar start`). Then do
+1. On S3, here https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz
+2. On NPM, here https://www.npmjs.com/package/autobahn
+3. On GitHub, here https://github.com/crossbario/autobahn-js-built
 
-```
-make test
-```
+### Update the release number in the repo
 
-### Bump version
-
-Update `package.json` with the new release number.
+Update 'package/package.json' with the new release number.
 
 
-### Build
+### Build for browsers
 
 In the root directory, do
 
 ```
-make build
+make all
 ```
 
-which will package the library for browser use into the `build` directory. For npm, there is nothing to build.
+which will package the library for browser use into the `build` directory.
 
 
 ### Tag the release
@@ -42,12 +35,35 @@ git tag -a v0.9.7 -m "tagged release"
 before you commit. (Add the hash of a commit at the end of the above to tag at a later time.)
 
 
-### Publish
+### Draft a release on GitHub
 
-To publish:
+If your comment for the tagging did not include "tagged release", then you need to manually draft a release. Go to 'releases' and 'Draft a new release' (adding some release notes is nice!).
+
+Otherwise: add release notes to the automatically created release.
+
+
+### Publish to npm
+
+In the `package` directory do
 
 ```
 make publish
 ```
 
-Don't forget to tag and push from the AutobahnJSbuilt repo (which has been updated by above command).
+(This requires your npm user to have publishing privileges for the package on npm.)
+
+
+### Copy over to AutobahnJSbuilt
+
+Just copy over the contents of the `build` directory to the AutobahnJSbuilt repo, tag and commit.
+
+
+### Upload to S3
+
+Do
+
+```
+scons publish
+```
+
+to upload the built version to S3.

@@ -4,13 +4,9 @@ import pkg_resources
 
 taschenmesser = pkg_resources.resource_filename('taschenmesser', '..')
 #taschenmesser = "../../infrequent/taschenmesser"
-ENV=os.environ
-
-ENV['JS_COMPILER'] = '/usr/local/lib/node_modules/google-closure-compiler/compiler.jar'
-
 env = Environment(tools = ['default', 'taschenmesser'],
                   toolpath = [taschenmesser],
-                  ENV = ENV)
+                  ENV = os.environ)
 
 # Get package version
 version = json.load(open('package.json'))['version']
@@ -27,15 +23,14 @@ sources = [os.path.join(sourcedir, d) for d in os.listdir(sourcedir)]
 # browserified
 ab = env.Command("build/autobahn.js",
                  "lib/autobahn.js",
-                 "./node_modules/browserify/bin/cmd.js $SOURCE --ignore-missing --standalone autobahn -o $TARGET")
+                 "browserify $SOURCE --standalone autobahn -o $TARGET")
 Depends(ab, sources)
 
 # minimized (with Google Closure)
 ab_min = env.JavaScript("build/autobahn.min.js",
                         ab,
                         #JS_COMPILATION_LEVEL = "ADVANCED_OPTIMIZATIONS")
-                        JS_COMPILATION_LEVEL = "SIMPLE_OPTIMIZATIONS",
-                        JS_OUTPUT_LANG = "ES5")
+                        JS_COMPILATION_LEVEL = "SIMPLE_OPTIMIZATIONS")
 
 # minimized & compressed
 ab_min_gz = env.GZip("build/autobahn.min.jgz",
